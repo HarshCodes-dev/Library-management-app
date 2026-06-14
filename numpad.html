@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Sarthi Study Centre — Entry</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="numpad-page">
+
+  <!-- ADMIN BUTTON -->
+  <button id="admin-access-btn" onclick="openAdminLogin()">Admin Panel</button>
+
+  <!-- MAIN NUMPAD -->
+  <div id="numpad-screen">
+    <div id="numpad-centre">
+
+      <div id="numpad-logo">
+        <h1>Sarthi Study Centre</h1>
+        <p>Enter your member code</p>
+      </div>
+
+      <div id="code-display">
+        <span class="code-digit" id="d0">_</span>
+        <span class="code-digit" id="d1">_</span>
+        <span class="code-digit" id="d2">_</span>
+        <span class="code-digit" id="d3">_</span>
+        <span class="code-digit" id="d4">_</span>
+      </div>
+
+      <div id="checkin-result"></div>
+
+      <div id="numpad-grid">
+        <button class="num-key" onclick="numPress('1')">1</button>
+        <button class="num-key" onclick="numPress('2')">2</button>
+        <button class="num-key" onclick="numPress('3')">3</button>
+        <button class="num-key" onclick="numPress('4')">4</button>
+        <button class="num-key" onclick="numPress('5')">5</button>
+        <button class="num-key" onclick="numPress('6')">6</button>
+        <button class="num-key" onclick="numPress('7')">7</button>
+        <button class="num-key" onclick="numPress('8')">8</button>
+        <button class="num-key" onclick="numPress('9')">9</button>
+        <button class="num-key key-del" onclick="numDel()">⌫</button>
+        <button class="num-key" onclick="numPress('0')">0</button>
+        <button class="num-key key-enter" onclick="doCheckin()">✓</button>
+      </div>
+
+      <div id="recent-entries">
+        <div id="recent-list"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADMIN LOGIN OVERLAY -->
+  <div id="admin-login-overlay" class="overlay hidden">
+    <div id="admin-login-box">
+      <button id="close-login-btn" onclick="closeAdminLogin()">✕</button>
+      <h2>Admin Access</h2>
+      <label for="admin-username">Username</label>
+      <input type="text" id="admin-username" placeholder="Enter username" autocomplete="off" />
+      <label for="admin-password">Password</label>
+      <input type="password" id="admin-password" placeholder="Enter password" />
+      <p id="admin-login-error"></p>
+      <button id="admin-login-btn" onclick="doAdminLogin()">Login</button>
+    </div>
+  </div>
+
+  <script src="numpad.js"></script>
+</body>
+</html>

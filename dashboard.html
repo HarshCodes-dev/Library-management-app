@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sarthi Study Centre — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dashboard-page">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div id="topbar-left">
+      <span id="topbar-title">Sarthi Study Centre</span>
+      <span id="topbar-date"></span>
+    </div>
+    <div id="topbar-right">
+    <button id="open-terminal-btn" onclick="localStorage.removeItem('sarthi_logged_in'); window.location.href='numpad.html'">← Entry Terminal</button>
+      <button id="logout-btn">Logout</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div id="dashboard-nav">
+    <button class="nav-btn active" id="btn-log" onclick="showView('log')">Today's Log</button>
+    <button class="nav-btn" id="btn-members" onclick="showView('members')">Members</button>
+  </div>
+
+  <!-- STATS ROW -->
+  <div id="stats-row">
+    <div class="stat-card">
+      <span class="stat-num" id="stat-inside">0</span>
+      <span class="stat-label">Inside now</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-visited">0</span>
+      <span class="stat-label">Visited today</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-total">0</span>
+      <span class="stat-label">Total members</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-expiring">0</span>
+      <span class="stat-label">Expiring soon</span>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div id="alerts-section"></div>
+
+  <!-- ===================== -->
+  <!-- VIEW: TODAY'S LOG     -->
+  <!-- ===================== -->
+  <div id="view-log" class="view active">
+
+    <div id="daily-log">
+
+      <div id="currently-inside-section">
+        <p class="log-section-label">Currently inside</p>
+        <div id="currently-inside-list">
+          <div class="empty-state">No one has checked in yet today</div>
+        </div>
+      </div>
+
+      <div id="log-divider"></div>
+
+      <div id="left-today-section">
+        <p class="log-section-label">Left today</p>
+        <div id="left-today-list">
+          <div class="empty-state">No one has left yet</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- VIEW: MEMBERS         -->
+  <!-- ===================== -->
+  <div id="view-members" class="view">
+
+    <div id="members-toolbar">
+      <input type="text" id="member-search" placeholder="Search by name or code" oninput="searchMembers()" />
+      <button id="add-member-btn" onclick="openMemberForm(null)">+ Add New Member</button>
+    </div>
+
+    <div id="members-list">
+      <div class="empty-state">No members yet</div>
+    </div>
+
+    <!-- MEMBER DETAIL (hidden by default) -->
+    <div id="member-detail" class="hidden">
+      <button class="back-btn" onclick="closeMemberDetail()">← Back to members</button>
+      <div id="detail-header">
+        <div id="detail-avatar"></div>
+        <div id="detail-info">
+          <h2 id="detail-name"></h2>
+          <p id="detail-id"></p>
+          <p id="detail-phone"></p>
+        </div>
+      </div>
+      <div id="detail-plan-card">
+        <p class="detail-section-title">Current subscription</p>
+        <div id="detail-plan-info"></div>
+        <div id="detail-plan-actions">
+          <button onclick="openMemberForm(currentDetailId)">Edit details</button>
+          <button onclick="openChangePlan(currentDetailId)">Change plan</button>
+        </div>
+      </div>
+      <div id="detail-history-card">
+        <p class="detail-section-title">Visit history</p>
+        <div id="detail-history-list"></div>
+      </div>
+    </div>
+
+    <!-- MEMBER FORM (hidden by default) -->
+    <div id="member-form" class="hidden">
+      <button class="back-btn" onclick="closeMemberForm()">← Back</button>
+      <h2 id="form-title">Add new member</h2>
+      <div id="form-fields">
+        <div class="form-group">
+          <label>Full name</label>
+          <input type="text" id="form-name" placeholder="Rahul Sharma" />
+        </div>
+        <div class="form-group">
+          <label>Phone number</label>
+          <input type="text" id="form-phone" placeholder="9876543210" />
+        </div>
+        <div class="form-group">
+          <label>Batch</label>
+          <select id="form-batch" onchange="toggleCustomBatch()">
+            <option value="night">Night (10pm – 8am)</option>
+            <option value="halfday">Half Day (6am – 3pm / 3pm – 11pm)</option>
+            <option value="fullday">Full Day (6am – 11pm)</option>
+            <option value="24hrs">24 Hours</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="form-group" id="custom-batch-group" style="display:none;">
+          <label>Custom batch timing</label>
+          <input type="text" id="form-custom-batch" placeholder="e.g. 7am – 1pm" />
+        </div>
+        <div class="form-group">
+          <label>Plan</label>
+          <select id="form-plan" onchange="toggleCustomDays()">
+            <option value="30">1 Month</option>
+            <option value="90">3 Months</option>
+            <option value="180">6 Months</option>
+            <option value="365">12 Months</option>
+            <option value="10">10 Days</option>
+            <option value="15">15 Days</option>
+            <option value="45">45 Days</option>
+            <option value="60">60 Days</option>
+            <option value="1">Per Day</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="form-group" id="custom-days-group" style="display:none;">
+          <label>Number of days</label>
+          <input type="number" id="form-custom-days" placeholder="e.g. 20" min="1" />
+        </div>
+        <div class="form-group">
+          <label>Amount paid (₹)</label>
+          <input type="number" id="form-amount" placeholder="6600" />
+        </div>
+        <div class="form-group">
+          <label>Start date</label>
+          <input type="date" id="form-start" />
+        </div>
+        <div class="form-group checkbox-group">
+          <label><input type="checkbox" id="form-locker" /> Locker</label>
+          <label><input type="checkbox" id="form-seat" /> Reserved seat</label>
+        </div>
+      </div>
+      <div id="form-actions">
+        <button id="form-save-btn" onclick="saveMember()">Save member</button>
+        <button id="form-cancel-btn" onclick="closeMemberForm()">Cancel</button>
+      </div>
+      <div id="form-result"></div>
+    </div>
+
+  </div>
+
+  <!-- ===================== -->
+  <!-- NUMPAD OVERLAY        -->
+  <!-- ===================== -->
+  
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
